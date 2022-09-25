@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        font-size: 20px;
+    }
+    .space{
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background-color: #222;
+        display: flex;
+        justify-content: space-around;
+    }
+    .darkMode{
+        display: flex;
+        color: white;
+        border: 1px solid white;
+        width: fit-content;
+        border-radius: 3rem;
+        height: fit-content;
+        background-color: #222;
+    }
+    .btn.active{
+        background-color: white;
+        color: #222;
+        border-radius: 3rem;
+    }
+    .btn{
+        padding: 1rem 2rem;
+        transition: all 500ms;
+    }
+    #movingImg{
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 300ms;
+    }
+    .droneOptView{
+        background-color: #333;
+        padding: 2rem 3.5rem;
+        width: fit-content;
+        display: none;
+    }
+    .droneOpt{
+        width: fit-content;
+        display: grid;
+        height: fit-content;
+    }
+    .droneOpt p {
+        margin: 0 auto;
+        background-color: white;
+        padding: .5rem 1rem;
+    }
+    .droneOptView div{
+        background-color: white;
+        width: fit-content;
+        padding: 1.2rem 2.2rem;
+        cursor: pointer;
+        margin: .5rem 0;
+    }
+</style>
+<body>
+    <div class="space">
+        <div class="darkMode">
+            <div class="btn active" id="btnDark">
+                dark
+            </div>
+            <div class="btn" id="btnLight">
+                light
+            </div>
+        </div>
+        <div class="droneOpt" id="optDisplay">
+            <p id="innerDrone">drone1</p>
+            <div class="droneOptView" id="opt">
+    
+            </div>
+        </div>
+        <img src="drone-removebg-preview.png" alt="" id="movingImg">
+    </div>
+</body>
+<script>
+    let img = document.getElementById('movingImg')
+    let btn1 = document.getElementById('btnDark')
+    let btn2 = document.getElementById('btnLight')
+    let space = document.getElementsByClassName('space')[0]
+    let Opt = document.getElementById('opt')
+    let OptDisplay = document.getElementById('innerDrone')
+    let drone = [{'drone1': 'drone-removebg-preview.png'} ,{'drone2':'drone2-removebg-preview.png'}]
+    drone.forEach((key)=>{
+        Opt.insertAdjacentHTML('beforeend', `<div>${Object.keys(key)}</div>`) 
+    })
+    onmousemove = (e) =>{
+        if(e.clientX>window.innerWidth/2){
+            img.style.left = `${e.clientX-210}px`
+        }else if(e.clientX<window.innerWidth/2){
+            img.style.left = `${e.clientX+210}px`
+        }
+        if (e.clientY>window.innerHeight/2) {
+            img.style.top = `${e.clientY-100}px`
+        }else{
+            img.style.top = `${e.clientY+100}px`
+        }
+    }
+    function toggle() {
+        if(this == btn1 ){
+            this.classList.add('active')
+            btn2.classList.remove('active')
+            space.style.backgroundColor = '#222'
+        }else{
+            this.classList.add('active')
+            btn1.classList.remove('active')
+            space.style.backgroundColor = '#eee'
+        }
+    }
+    btn1.onclick = toggle
+    btn2.onclick = toggle
+    OptDisplay.onclick = removeClass
+    // reusable block of code all you have to do is add more details in the drone array
+    function check() {
+        drone.forEach((key)=>{
+            if(this.innerText == Object.keys(key)){
+                img.src = Object.values(key)
+                OptDisplay.innerHTML = this.innerText
+            }
+        })
+        
+    }
+    for (let index = 0; index < drone.length; index++) {
+        Opt.children.item(index).addEventListener('click', check)      
+    }
+    function removeClass() {
+        Opt.style.display = Opt.style.display == 'none'? 'block' : 'none'
+    }
+</script>
+</html>
